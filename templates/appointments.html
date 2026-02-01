@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Appointments - Healthcare Portal{% endblock %}
+
+{% block content %}
+<div class="max-w-6xl mx-auto">
+    <div class="bg-white shadow rounded-lg">
+        <div class="px-4 py-5 border-b border-gray-200 sm:px-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h2 class="text-2xl font-semibold text-gray-900">Your Appointments</h2>
+                    <p class="mt-1 text-sm text-gray-500">View and manage all your appointments</p>
+                </div>
+                <a href="{{ url_for('new_appointment') }}" 
+                   class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    <i class="fas fa-plus mr-2"></i>New Appointment
+                </a>
+            </div>
+        </div>
+        
+        <div class="overflow-hidden">
+            {% if appointments %}
+            <ul class="divide-y divide-gray-200">
+                {% for appointment in appointments %}
+                <li class="hover:bg-gray-50">
+                    <div class="px-4 py-4 sm:px-6">
+                        <div class="flex items-center justify-between">
+                            <div class="flex-1">
+                                <div class="flex items-center justify-between">
+                                    <p class="text-sm font-medium text-blue-600 truncate">
+                                        {{ appointment.title }}
+                                    </p>
+                                    <div class="ml-2 flex-shrink-0 flex">
+                                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
+                                            {% if appointment.status == 'Confirmed' %}bg-green-100 text-green-800
+                                            {% elif appointment.status == 'Scheduled' %}bg-yellow-100 text-yellow-800
+                                            {% elif appointment.status == 'Completed' %}bg-gray-100 text-gray-800
+                                            {% else %}bg-red-100 text-red-800{% endif %}">
+                                            {{ appointment.status }}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 sm:flex sm:justify-between">
+                                    <div class="sm:flex">
+                                        <p class="flex items-center text-sm text-gray-500">
+                                            <i class="far fa-calendar-alt mr-1.5 text-gray-400"></i>
+                                            {{ appointment.appointment_date.strftime('%B %d, %Y, %I:%M %p') }}
+                                        </p>
+                                        <p class="mt-2 flex items-center text-sm text-gray-500 sm:mt-0 sm:ml-6">
+                                            <i class="fas fa-user-md mr-1.5 text-gray-400"></i>
+                                            {{ appointment.provider_name }}
+                                        </p>
+                                    </div>
+                                </div>
+                                {% if appointment.notes %}
+                                <div class="mt-2">
+                                    <p class="text-sm text-gray-600">{{ appointment.notes }}</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+            {% else %}
+            <div class="text-center py-12">
+                <i class="fas fa-calendar-times text-gray-400 text-5xl mb-4"></i>
+                <h3 class="text-lg font-medium text-gray-900 mb-2">No appointments scheduled</h3>
+                <p class="text-sm text-gray-500 mb-4">Get started by scheduling your first appointment.</p>
+                <a href="{{ url_for('new_appointment') }}" 
+                   class="bg-blue-600 py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                    Schedule Appointment
+                </a>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

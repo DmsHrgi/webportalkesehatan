@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Healthcare Portal - {% block title %}{% endblock %}</title>
+		<link
+			href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+			rel="stylesheet"
+		/>
+		<style>
+			.btn-primary {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				padding: 0.75rem 1.5rem;
+				border-radius: 0.5rem;
+				font-weight: 600;
+				transition: all 0.3s ease;
+				box-shadow: 0 4px 15px 0 rgba(102, 126, 234, 0.4);
+			}
+			.btn-primary:hover {
+				transform: translateY(-2px);
+				box-shadow: 0 6px 20px 0 rgba(102, 126, 234, 0.6);
+			}
+			.form-input {
+				width: 100%;
+				padding: 0.75rem 1rem;
+				border: 2px solid #e5e7eb;
+				border-radius: 0.5rem;
+				transition: all 0.3s ease;
+				background: #f9fafb;
+			}
+			.form-input:focus {
+				outline: none;
+				border-color: #667eea;
+				background: white;
+				box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+			}
+			.card {
+				background: white;
+				border-radius: 1rem;
+				box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+				padding: 2rem;
+				margin-bottom: 1.5rem;
+				transition: transform 0.3s ease;
+			}
+			.card:hover {
+				transform: translateY(-5px);
+			}
+			.nav-gradient {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+			}
+			.hero-gradient {
+				background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+			}
+			.stats-card {
+				background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+				color: white;
+				border-radius: 1rem;
+				padding: 1.5rem;
+				box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+				transition: all 0.3s ease;
+			}
+			.stats-card:hover {
+				transform: translateY(-5px);
+				box-shadow: 0 15px 35px rgba(102, 126, 234, 0.4);
+			}
+			.quick-action-card {
+				background: white;
+				border: 2px solid #e5e7eb;
+				border-radius: 0.75rem;
+				padding: 1.5rem;
+				transition: all 0.3s ease;
+			}
+			.quick-action-card:hover {
+				border-color: #667eea;
+				box-shadow: 0 10px 25px rgba(102, 126, 234, 0.15);
+				transform: translateY(-3px);
+			}
+			body {
+				background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+				min-height: 100vh;
+			}
+		</style>
+		{% block extra_css %}{% endblock %}
+	</head>
+	<body>
+		<nav class="nav-gradient shadow-2xl">
+			<div class="max-w-7xl mx-auto px-4">
+				<div class="flex justify-between h-16">
+					<div class="flex items-center">
+						<a
+							href="{{ url_for('index') }}"
+							class="text-2xl font-bold text-white flex items-center hover:opacity-90 transition-opacity"
+						>
+							<i class="fas fa-heartbeat mr-3"></i>
+							Healthcare Portal
+						</a>
+					</div>
+					<div class="flex items-center space-x-6">
+						{% if current_user.is_authenticated %}
+						<a
+							href="{{ url_for('dashboard') }}"
+							class="text-white hover:text-purple-200 transition-colors font-medium"
+						>
+							<i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+						</a>
+						<a
+							href="{{ url_for('logout') }}"
+							class="text-white hover:text-purple-200 transition-colors font-medium"
+						>
+							<i class="fas fa-sign-out-alt mr-2"></i>Logout
+						</a>
+						{% else %}
+						<a
+							href="{{ url_for('login') }}"
+							class="text-white hover:text-purple-200 transition-colors font-medium"
+						>
+							<i class="fas fa-sign-in-alt mr-2"></i>Login
+						</a>
+						<a
+							href="{{ url_for('register') }}"
+							class="bg-white text-purple-600 px-4 py-2 rounded-lg font-semibold hover:bg-purple-50 transition-colors"
+						>
+							Register
+						</a>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</nav>
+
+		<main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+			{% with messages = get_flashed_messages(with_categories=true) %} {% if
+			messages %} {% for category, message in messages %}
+			<div
+				class="mb-6 p-4 rounded-lg shadow-lg {% if category == 'error' %}bg-red-50 border-l-4 border-red-500 text-red-700{% else %}bg-green-50 border-l-4 border-green-500 text-green-700{% endif %}"
+			>
+				<div class="flex items-center">
+					<i
+						class="fas {% if category == 'error' %}fa-exclamation-circle text-red-500{% else %}fa-check-circle text-green-500{% endif %} mr-3"
+					></i>
+					{{ message }}
+				</div>
+			</div>
+			{% endfor %} {% endif %} {% endwith %} {% block content %}{% endblock %}
+		</main>
+
+		<footer class="bg-gray-800 text-white mt-16 py-8">
+			<div class="max-w-7xl mx-auto px-4 text-center">
+				<div class="flex justify-center items-center mb-4">
+					<i class="fas fa-heartbeat text-2xl mr-3"></i>
+					<span class="text-xl font-semibold">Healthcare Portal</span>
+				</div>
+				<p class="text-gray-400">
+					© 2024 Healthcare Portal. All rights reserved.
+				</p>
+				<p class="text-gray-500 text-sm mt-2">Your health, our priority</p>
+			</div>
+		</footer>
+
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		{% block extra_js %}{% endblock %}
+	</body>
+</html>
